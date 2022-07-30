@@ -1,0 +1,71 @@
+apply plugin: 'jacoco'
+
+ext {
+    coverageExclusions = [
+            '**/*Activity*.*',
+            '**/*Fragment*.*',
+            '**/R.class',
+            '**/R$*.class',
+            '**/BuildConfig.*',
+    ]
+}
+
+jacoco {
+    toolVersion = '0.8.8'
+    reportsDir = file("$buildDir/reports")
+}
+
+///
+project.afterEvaluate { project ->
+    System.out.println("+++ project.afterEvaluate(), $project, ${android.sourceSets.main.java.srcDirs}")
+
+}
+///
+
+tasks.withType(Test) {
+    jacoco.includeNoLocationClasses = true
+    // https://github.com/gradle/gradle/issues/5184#issuecomment-457865951
+    jacoco.excludes = ['jdk.internal.*']
+}
+
+
+tasks.withType(Test) {
+    finalizedBy jacocoTestReport // report is always generated after tests run
+}
+
+task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest']) {
+    group = "Reporting"
+    description = "Generate Jacoco coverage reports for Debug build"
+
+    ///
+    reports {
+        xml.enabled = true
+        xml.setDestination(file("${project.buildDir}/reports/jacoco/debug.xml"))
+        html.enabled = true
+        html.setDestination(file("${project.buildDir}/reports/jacoco/html"))
+    }
+    ///
+//    reports {
+//        xml.enabled = true
+//        html.enabled = true
+//
+//
+//        ///
+//        sourceSets sourceSets.main
+//        ///
+//    }
+
+    def debugTree = fileTree(dir: "${buildDir}/intermediates/javac/debug/classes", excludes: coverageExclusions)
+    def mainSrc = "/src/main/java"
+
+    additionalSourceDirs.from = files(mainSrc)
+    //sourceDirectories.from = files([mainSrc])
+
+    ///
+    sourceDirectories.from(files(android.sourceSets.main.java.srcDirs))
+    ///
+
+    classDirectories.from = files([debugTree])
+    executionData.from = files("$buildDir/outputs/unit_test_code_coverage/debugUnitTest/testDebugUnitTest.exec")
+//    executionData.from = files("$buildDir/jacoco/testDebugUnitTest.exec")
+}

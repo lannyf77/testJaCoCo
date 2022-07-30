@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.example.android_sample_app.data.CarTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2022-07-30T13:01:31" hostname="C02X1AHXJG5J" time="0.015">
+  <properties/>
+  <testcase name="equal_invalid" classname="com.example.android_sample_app.data.CarTest" time="0.008"/>
+  <testcase name="equal_valid" classname="com.example.android_sample_app.data.CarTest" time="0.006"/>
+  <testcase name="getManufacturer" classname="com.example.android_sample_app.data.CarTest" time="0.001"/>
+  <testcase name="getName" classname="com.example.android_sample_app.data.CarTest" time="0.0"/>
+  <testcase name="equal_valid_equal" classname="com.example.android_sample_app.data.CarTest" time="0.0"/>
+  <system-out><![CDATA[+++ equal:false, hash1:-473756836, hash2:-473756836
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
